@@ -1,0 +1,38 @@
+name: flutter_application_1
+description: "Aplikasi Flutter baru saya."
+publish_to: 'none' # Hapus baris ini jika ingin mempublikasikan package ke pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Tambahkan package eksternal di sini, contoh:
+  # cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/bca.png
+    - assets/images/mandiri.png
+    - assets/images/gopay.png
+    - assets/images/welma.png
+    - assets/images/goto.png
+    - assets/images/ethereum.png
+    - assets/images/bri.png
+    - assets/images/solana.png
+    - assets/images/telkom.png
+    - assets/images/tether.png
+    - assets/images/myvault.png
+  

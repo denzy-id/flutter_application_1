@@ -14,8 +14,9 @@ class MyVaultApp extends StatelessWidget {
       title: 'myVault Private',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        useMaterial3: true,
+        fontFamily: 'sans-serif',
         scaffoldBackgroundColor: const Color(0xFFF8FAFC),
+        useMaterial3: true,
       ),
       home: const LoginPage(),
     );

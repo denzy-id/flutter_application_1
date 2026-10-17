@@ -1,14 +1,11 @@
-import '../utils/currency_helper.dart';
-
 class BankAccount {
   final String id;
   String bankName;
   String accountNumber;
   String imageAssetPath;
+  double balance;
   String accountCategory;
-  
-  double _balance;
-  bool _isFavorite;
+  bool isFavorite;
 
   BankAccount({
     required this.id,
@@ -16,37 +13,22 @@ class BankAccount {
     required this.accountNumber,
     required this.imageAssetPath,
     required double initialBalance,
-    this.accountCategory = 'Bank Utama',
-    bool isFavorite = false,
-  })  : _balance = initialBalance,
-        _isFavorite = isFavorite;
+    required this.accountCategory,
+    this.isFavorite = false,
+  }) : balance = initialBalance;
 
-  double get balance => _balance;
-  bool get isFavorite => _isFavorite;
-
-  String get formattedBalance => CurrencyHelper.format(_balance);
-
-  set balance(double newBalance) {
-    if (newBalance >= 0) {
-      _balance = newBalance;
-    }
-  }
-
-  void deposit(double amount) {
-    if (amount > 0) {
-      _balance += amount;
-    }
+  String get formattedBalance {
+    return 'Rp ${balance.toStringAsFixed(0).replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (Match m) => '${m[1]}.',
+    )}';
   }
 
   bool withdraw(double amount) {
-    if (amount > 0 && _balance >= amount) {
-      _balance -= amount;
+    if (balance >= amount) {
+      balance -= amount;
       return true;
     }
     return false;
-  }
-
-  void toggleFavorite() {
-    _isFavorite = !_isFavorite;
   }
 }

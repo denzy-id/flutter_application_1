@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
     techStack: const ['Flutter 3.x', 'Clean OOP', 'PIN Security', 'NetWorth Chart', 'Export PDF/CSV'],
     bio: 'Platform Agregasi Kekayaan & Portofolio Manajemen Terpadu dengan fitur Saham, Kripto, Transfer, QRIS, & Export Report.',
     email: 'private@myvault.wealth.id',
+    avatarPath: 'assets/images/developer.png',
   );
 
   bool _hideBalance = false;
@@ -41,6 +42,130 @@ class _HomePageState extends State<HomePage> {
           acc.accountNumber.contains(_searchQuery);
       return matchesCategory && matchesSearch;
     }).toList();
+  }
+
+  String _getImagePathByCategory(String category) {
+    switch (category) {
+      case 'Kripto':
+        return 'assets/images/bitcoin.png';
+      case 'E-Wallet':
+        return 'assets/images/gopay.png';
+      case 'Bank Utama':
+      case 'Bank Sekunder':
+        return 'assets/images/bca.png';
+      case 'Investasi Saham':
+      default:
+        return 'assets/images/welma.png';
+    }
+  }
+
+  Widget _buildLightInput({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    TextInputType? keyboardType,
+  }) {
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13, fontWeight: FontWeight.w600),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Color(0xFF64748B), fontSize: 12),
+        prefixIcon: Icon(icon, color: const Color(0xFFD97706), size: 20),
+        filled: true,
+        fillColor: const Color(0xFFF8FAFC),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickAction(IconData icon, String label, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
+            ),
+            child: Icon(icon, color: const Color(0xFF0F172A), size: 20),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 10, color: Color(0xFF0F172A), fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReportSummaryRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF64748B))),
+          Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNetWorthGrowthChart() {
+    const List<double> growthData = [0.65, 0.72, 0.68, 0.82, 0.88, 0.92, 1.0];
+    const List<String> days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Ming'];
+
+    return Container(
+      margin: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Tren Pertumbuhan 7 Hari', style: TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.bold)),
+              Icon(Icons.trending_up_rounded, color: Color(0xFF34D399), size: 16),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: List.generate(growthData.length, (index) {
+              return Column(
+                children: [
+                  Container(
+                    width: 14,
+                    height: 38 * growthData[index],
+                    decoration: BoxDecoration(
+                      color: index == growthData.length - 1 ? const Color(0xFFFBBF24) : Colors.white38,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(days[index], style: const TextStyle(color: Colors.white54, fontSize: 9)),
+                ],
+              );
+            }),
+          )
+        ],
+      ),
+    );
   }
 
   void _showExportReportModal() {
@@ -137,67 +262,6 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildReportSummaryRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF64748B))),
-          Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNetWorthGrowthChart() {
-    const List<double> growthData = [0.65, 0.72, 0.68, 0.82, 0.88, 0.92, 1.0];
-    const List<String> days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Ming'];
-
-    return Container(
-      margin: const EdgeInsets.only(top: 16),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('Tren Pertumbuhan 7 Hari', style: TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.bold)),
-              Icon(Icons.trending_up_rounded, color: Color(0xFF34D399), size: 16),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: List.generate(growthData.length, (index) {
-              return Column(
-                children: [
-                  Container(
-                    width: 14,
-                    height: 38 * growthData[index],
-                    decoration: BoxDecoration(
-                      color: index == growthData.length - 1 ? const Color(0xFFFBBF24) : Colors.white38,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(days[index], style: const TextStyle(color: Colors.white54, fontSize: 9)),
-                ],
-              );
-            }),
-          )
-        ],
-      ),
     );
   }
 
@@ -421,7 +485,6 @@ class _HomePageState extends State<HomePage> {
     final balanceController = TextEditingController();
 
     String selectedCategory = 'Investasi Saham';
-    String selectedImagePath = 'assets/images/welma.png';
 
     showModalBottomSheet(
       context: context,
@@ -454,6 +517,26 @@ class _HomePageState extends State<HomePage> {
                     _buildLightInput(controller: accountNumberController, label: 'Nomor Rekening / Lot / Jumlah Koin', icon: Icons.numbers_rounded),
                     const SizedBox(height: 12),
                     _buildLightInput(controller: balanceController, label: 'Saldo Awal (Rp)', icon: Icons.attach_money_rounded, keyboardType: TextInputType.number),
+                    const SizedBox(height: 12),
+
+                    DropdownButtonFormField<String>(
+                      initialValue: selectedCategory,
+                      decoration: InputDecoration(
+                        labelText: 'Kategori Aset',
+                        prefixIcon: const Icon(Icons.category_rounded, color: Color(0xFFD97706), size: 20),
+                        filled: true,
+                        fillColor: const Color(0xFFF8FAFC),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+                      ),
+                      items: ['Bank Utama', 'Bank Sekunder', 'Investasi Saham', 'Kripto', 'E-Wallet'].map((cat) {
+                        return DropdownMenuItem(value: cat, child: Text(cat, style: const TextStyle(fontSize: 13, color: Color(0xFF0F172A))));
+                      }).toList(),
+                      onChanged: (val) {
+                        if (val != null) {
+                          setModalState(() => selectedCategory = val);
+                        }
+                      },
+                    ),
                     const SizedBox(height: 20),
 
                     SizedBox(
@@ -477,7 +560,7 @@ class _HomePageState extends State<HomePage> {
                                   id: DateTime.now().millisecondsSinceEpoch.toString(),
                                   bankName: name,
                                   accountNumber: accNum,
-                                  imageAssetPath: selectedImagePath,
+                                  imageAssetPath: _getImagePathByCategory(selectedCategory),
                                   initialBalance: balance,
                                   accountCategory: selectedCategory,
                                 ),
@@ -553,7 +636,6 @@ class _HomePageState extends State<HomePage> {
 
                           if (amount <= 0 || recipient.isEmpty) return;
 
-                          // Tangkap konteks sebelum async gap untuk menghindari warning use_build_context_synchronously
                           final navigator = Navigator.of(modalContext);
                           final messenger = ScaffoldMessenger.of(context);
 
@@ -650,7 +732,6 @@ class _HomePageState extends State<HomePage> {
                           final amount = double.tryParse(amountController.text) ?? 0;
                           if (amount <= 0) return;
 
-                          // Tangkap konteks sebelum async gap
                           final navigator = Navigator.of(modalContext);
                           final messenger = ScaffoldMessenger.of(context);
 
@@ -706,6 +787,7 @@ class _HomePageState extends State<HomePage> {
               Container(width: 44, height: 5, decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(10))),
               const SizedBox(height: 20),
               
+              // Foto Profil Modal
               Container(
                 width: 80,
                 height: 80,
@@ -713,7 +795,17 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: const Color(0xFFD97706), width: 2)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(40),
-                  child: Image.asset(_developerInfo.avatarPath, fit: BoxFit.cover, errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 50, color: Color(0xFF0F172A))),
+                  child: Image.asset(
+                    _developerInfo.avatarPath,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        Icons.person_rounded,
+                        size: 48,
+                        color: Color(0xFF0F172A),
+                      );
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: 14),
@@ -759,9 +851,20 @@ class _HomePageState extends State<HomePage> {
                 child: CircleAvatar(
                   radius: 17,
                   backgroundColor: const Color(0xFF0F172A),
-                  child: Text(
-                    widget.user.fullName.isNotEmpty ? widget.user.fullName[0].toUpperCase() : 'U',
-                    style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.bold, fontSize: 14),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(17),
+                    child: Image.asset(
+                      _developerInfo.avatarPath,
+                      width: 34,
+                      height: 34,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Text(
+                          widget.user.fullName.isNotEmpty ? widget.user.fullName[0].toUpperCase() : 'U',
+                          style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.bold, fontSize: 14),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -926,12 +1029,31 @@ class _HomePageState extends State<HomePage> {
                         width: 44,
                         height: 44,
                         padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(color: const Color(0xFFF8FAFC), borderRadius: BorderRadius.circular(12)),
-                        child: Image.asset(account.imageAssetPath, fit: BoxFit.contain, errorBuilder: (_, __, ___) => const Icon(Icons.account_balance, color: Color(0xFF0F172A))),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Image.asset(
+                          account.imageAssetPath,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(
+                              Icons.account_balance_wallet_rounded,
+                              color: Color(0xFF0F172A),
+                              size: 24,
+                            );
+                          },
+                        ),
                       ),
                       title: Row(
                         children: [
-                          Expanded(child: Text(account.bankName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF0F172A)), overflow: TextOverflow.ellipsis)),
+                          Expanded(
+                            child: Text(
+                              account.bankName,
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF0F172A)),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                           if (account.isFavorite) ...[
                             const SizedBox(width: 4),
                             const Icon(Icons.star_rounded, size: 16, color: Color(0xFFD97706)),
@@ -956,44 +1078,6 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: const Color(0xFF0F172A),
         icon: const Icon(Icons.add, color: Color(0xFFFBBF24)),
         label: const Text('Tambah Aset', style: TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.bold)),
-      ),
-    );
-  }
-
-  Widget _buildQuickAction(IconData icon, String label, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE2E8F0))),
-            child: Icon(icon, color: const Color(0xFF0F172A), size: 20),
-          ),
-          const SizedBox(height: 6),
-          Text(label, style: const TextStyle(fontSize: 10, color: Color(0xFF0F172A), fontWeight: FontWeight.w600)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLightInput({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    TextInputType? keyboardType,
-  }) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13, fontWeight: FontWeight.w600),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(color: Color(0xFF64748B), fontSize: 12),
-        prefixIcon: Icon(icon, color: const Color(0xFFD97706), size: 20),
-        filled: true,
-        fillColor: const Color(0xFFF8FAFC),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
       ),
     );
   }
